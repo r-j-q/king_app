@@ -1,0 +1,265 @@
+<script>
+	// #ifdef APP-PLUS
+	import Aegis from 'aegis-weex-sdk';
+	import TrtcCloud from "@/TrtcCloud/lib/index"; // 将 TrtcCloud 引入到代码中
+	// #endif
+	
+	import $config from '@/common/config'
+	// const TUICallKit = uni.requireNativePlugin('TencentCloud-TUICallKit');
+	export default {
+		onLaunch: function() {
+			this.$options.checkLogin();
+			
+			// // #ifdef APP-PLUS
+			
+			// 	const projectName = 'uniappApiExampleExt';
+			//     uni.$aegis = new Aegis({
+			//       id: 'iHWefAYqWuCkDjhucc',
+			//       spa: true,
+			//       reportApiSpeed: true,
+			//       reportAssetSpeed: true,
+			//       pagePerformance: true,
+			//       hostUrl: 'https://tamaegis.com',
+			//     });
+			//     uni.$uploadToTAM = (eventString, sdkAppId) => {
+			//       uni.$aegis.reportEvent({
+			//         name: eventString.split('#')[0] || '',
+			//         ext1: eventString,
+			//         ext2: projectName,
+			//         ext3: sdkAppId,
+			//       });
+			//     };
+			//     uni.$createTrtcCloudUpload = sdkAppId => uni.$uploadToTAM('createTrtcCloud', sdkAppId);
+			//     uni.$enterRoomSuccessUpload = sdkAppId => uni.$uploadToTAM('enterRoom-success', sdkAppId);
+			//     uni.$enterRoomFailedUpload = (sdkAppId, errorMsg) => uni.$uploadToTAM(`enterRoom-failed#error: ${errorMsg}`, sdkAppId);
+			//     uni.$onErrorUpload = (sdkAppId, errorMsg) => uni.$uploadToTAM(`onError-failed#error: ${errorMsg}`, sdkAppId);
+			//     uni.$startLocalPreviewUpload = sdkAppId => uni.$uploadToTAM('startLocalPreview', sdkAppId);
+			//     uni.$startRemoteViewSuccessUpload = sdkAppId => uni.$uploadToTAM('startRemoteView-success', sdkAppId);
+			//     uni.$startRemoteViewFailedUpload = (sdkAppId, errorMsg) => uni.$uploadToTAM(`startRemoteView-failed#error: ${errorMsg}`, sdkAppId);
+			// // #endif
+			    console.log('App Launch')
+		},
+		
+		
+		onShow: function() {
+			setTimeout(()=>{
+				// #ifdef APP-PLUS 
+				plus.navigator.closeSplashscreen()
+				// #endif
+			}, 2000)
+		},
+		onHide: function() {
+			
+		},
+		//检查登录状态
+		checkLogin() {
+			let user_token = uni.getStorageSync('token');
+			let header = $config.HEADER
+			header[$config.TOKENNAME] = 'Bearer '+user_token
+				uni.request({
+					url:$config.SERVER_PATH+'user/authed',
+					method:'GET',
+					header,
+					success: (res) => {
+						if(res.data.code==401)
+						{
+							uni.clearStorage()
+							 uni.redirectTo({
+							 	url:'/pages/login/login'
+							 })
+							 return; 
+						}
+						uni.setStorage({
+							key: 'userinfo',
+							data: res.data
+						});
+					},
+					fail:(err)=>{
+						console.log('err',err)
+					}
+					
+				})
+			  
+			   }
+		
+	}
+
+</script>
+
+<style>
+	
+</style>
+
+<style lang="scss">
+
+	@import "/static/iconfont.css";
+	
+	/*每个页面公共css */
+	page{
+		background: #f5f5f5;
+	}
+	.flexs{
+		display: flex;
+		justify-content: space-between;
+		
+	}
+	button::after{
+			border: none;
+			background-color: none;
+		}
+	.serline{
+		border-left: 1upx solid #f4f4f4;
+		border-right: 1upx solid #f4f4f4;
+		border-bottom: 1upx solid #f4f4f4;
+	}
+	.uni-searchbar__box{
+		justify-content: unset!important;
+	}
+	.setghg{
+		background-color: #fff;
+		border-radius: 30upx;
+	}
+	
+	.search-with{
+		display: flex;
+		align-items: center;
+		/* padding: 40upx; */
+		color: #666;
+		font-size: 28upx;
+		position: -webkit-sticky;
+		position: sticky;
+		top: var(--window-top);
+		z-index: 111;
+		background-color: #efefef;
+		padding-left: 20upx;
+		padding-bottom: 8upx;
+		
+	}
+	.surcoe{
+		position: absolute;
+		left: 70px;
+		right: 70px;
+		min-width: 0;
+		text-align: center;
+		font-size: 30upx;
+		font-weight: 600;
+		z-index: 100;
+		color: #fff;
+		
+		
+	}
+	.search-input{
+		width: 70%;
+		padding: 0 20upx;
+	}
+	
+	.iotops{
+		padding: 8upx 25upx;
+		border-bottom: 1upx solid #ccc;
+		background-color: #fff;
+		align-items: center;
+	}
+	.surwith{
+		width: 90%;
+		height: 100upx;
+		margin: 30upx auto;
+		
+	}
+	
+	.uni-searchbar{
+		padding: 20upx 0!important;
+	}
+	.cateIcon{
+		/* width: 90%; */
+		margin: 40upx auto;
+		border-radius: 30upx;
+		padding: 20upx 0;
+		/* box-shadow: 1px 1px 6upx 4upx rgba(0, 0, 0, 0.1); */
+		box-shadow: 1px 2upx 6upx 4upx rgba(128,128,128,0.2);
+		justify-content: flex-start;
+		flex-wrap: wrap;
+		text-align: center;
+		font-size: 26upx;
+		margin-left: 38upx;
+		margin-right: 38upx;
+		
+	}
+	
+	.setmang{
+		width: 25%;
+		padding: 20upx 0;
+		
+	}
+	.cateImg image{
+		width: 56upx;
+		height: 56upx;
+	}
+	.cateName{
+		padding-top: 16upx;
+	}
+	
+
+	.popup-content {
+		// @include flex;
+		// align-items: center;
+		// justify-content: center;
+		padding: 15px;
+		// height: 250px;
+		background-color: #fff;
+		grid-gap: 80upx!important;
+	}
+
+	button::after{
+	 	border: none;
+	}
+	button{
+		position: relative;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		padding-left: 0px;
+		padding-right: 0px;
+		box-sizing: border-box;
+		// font-size: 18px;
+		text-align: center;
+		text-decoration: none;
+		// line-height: 1;
+		line-height: 1.35;
+		// border-radius: 5px;
+		-webkit-tap-highlight-color: transparent;
+		overflow: hidden;
+		color: #000000;
+		background-color: #fff;
+		width: unset;
+		height: unset;
+		}
+		.popup-content{
+		justify-content: flex-start;
+		text-align: center;
+		grid-gap: 60upx;
+		padding: 60upx;
+		border-radius: 30upx 30upx 0 0;
+	}
+	.op-height{
+		position: relative;
+	}
+	.closespop{
+		position: absolute;
+		right: 0;
+		padding: 20upx;
+	}
+	.wxfBack image{
+		
+		width: 90upx;
+		height: 90upx;
+		
+		text-align: center;
+		
+	}
+	.phsy {
+			font-size: 28upx !important;
+			color: #B3B3B3 !important
+		}
+		
+		
+</style>

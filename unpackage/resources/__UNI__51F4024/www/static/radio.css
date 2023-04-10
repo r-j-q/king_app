@@ -1,0 +1,12 @@
+ /* radio 选中后的样式 */
+	 	uni-radio .uni-radio-input.uni-radio-input-checked::before{
+	 		font-size: 24upx!important;
+	 	}
+	 	
+	 	
+	 	uni-radio .uni-radio-input {
+			border-radius: 6upx!important;
+			width: 22upx!important;
+			height: 22upx!important;
+			
+		}

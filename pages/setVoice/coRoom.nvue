@@ -1,0 +1,2485 @@
+<template>
+	<div>
+		
+				<view  style="background-color:#212526 ;"
+				 :style="[{'paddingTop':statusBar+'px','paddingBottom':20+'px'}]">
+					<view class="sumap">
+						<view class="plback" >
+							<uni-icons @click="goBack" type="left" color="#fff" size="60"></uni-icons>
+						</view>
+						<view class="toptab" @click="ioTabs(3)">
+							<text  class="me1">会议室({{objUserIdList.length}})</text>
+						</view>
+						<view class="overmeet"  @click="ioTabs(4)">
+							<text class="me2">结束</text>
+						</view>
+					</view>
+				</view>	
+					
+				
+		
+	
+		<scroll-view class="lists" style="background-color: #2D3134;"  scroll-y="true">
+		
+			<!-- <view   class="hostRoom" :class="ispreviewStat?'setopts':'notopts'" > -->
+				<view   class="hostRoom">
+					<view class="trtc-video-area">
+						<view class="trtc-video-view" 
+						 :style="[{'height':200+'px','width':'160px'}]"  
+						 id='root'>
+							<trtc-local-view :viewId="userId"></trtc-local-view>
+						</view>
+						
+					</view>	
+				<view class="otherImg">
+							
+					<view class="hostmain otimg"   v-for="(item, index) in objUserIdList" :key="index">
+								
+							<div v-if="isbs==true"  @click="setwichange(item)" style="position: fixed;
+								width: 750px;flex: 1;top: 0;bottom: 0;" >
+								<trtc-remote-view  
+								v-if="item.userId"  style="flex:1"   :userId="item.userId" 
+								:viewId="item.userId">
+								</trtc-remote-view>
+							</div>
+						
+							<div v-else @click="setwichange(item)" :class="item.videoStat?'setborder':''" 
+								style="width: 300rpx;
+								height: 380rpx;position: absolute;transform: translate(0, 0)">
+								<trtc-remote-view  
+								v-if="item.userId" style="flex: 1"   :userId="item.userId" 
+								:viewId="item.userId">
+								</trtc-remote-view>
+							 </div>
+									
+							<view class="hostmp sexc">
+									<image v-if="item.avatar" class="pigm"
+									 :class="item.videoStat?'setopts':'notopts'"  
+									  :src=item.avatar >
+									</image>
+									<image v-else class="pigm" :class="item.videoStat?'setopts':'notopts'"  
+									 src="../../static/img/logo.png">							
+									 </image>
+									
+								<view  class="ifds sexc">
+									<view class="joNmae">
+										<text  class="romfont reFont" :class="item.videoStat?'setopts':''">
+										{{item.is_host?'主持人':item.userName}}
+										<!-- {{item.is_host?'(主持人)':''}} -->
+										</text>
+									</view>
+									<view  style="position: relative;height: 40px;
+										margin-top: 24rpx;margin-left: 10rpx;"
+										:class="item.videoStat?'setopts':'notopts'">	
+										<view v-if="item.ayssetAudioStat" style="width: 40px; height: 40px;
+												position: relative">
+										   	<image  style="position: absolute;
+												 bottom: 0;left: 0;width: 40px;height: 40px;"
+												 src="/static/img/mic-on.png" alt=""></image>
+	                                        
+								 			<view class="voleg" :style="{'height':item.setheight}">
+												<image   style="position: absolute; bottom: 0;
+												width: 40px;height: 40px;"  alt=""
+												 src="/static/img/mic-green.png"></image>
+											 </view>
+										 </view>
+										
+										<view v-else style="width: 40px; height: 40px; position: relative">
+											<image  style="position: absolute; bottom: 0;width: 40px;height: 40px;" 
+											src="/static/img/j1.png" alt=""></image>
+										</view>
+									</view>			
+								</view>
+								
+							</view>
+					</view>
+					
+									
+									
+				</view>
+				
+				
+				
+			</view>
+			
+			
+	
+			
+		<view class="op-height">
+			<uni-popup ref="popup">
+				<view class="popup-content" style="height: 2200rpx;">
+					<view class="chetFlex swline">
+						<text class="ovsty">聊天</text>
+						<view class="chatclose" >
+							<uni-icons @click="chatclose" type="closeempty" size="50"></uni-icons>
+						</view>
+					</view>
+					
+					<!------------------------对方消息-------------------- -->
+					<view class="left_box">
+						<view>
+							<text class="ovsty">奇尔韦尔</text>
+						</view>
+						<view class="chat_item">
+							<text class="ovsty">
+								33333
+							</text>
+						</view>
+						<view class="isp"></view>
+					</view>
+					<!-- ----------------------自己消息-------------------- -->
+					<view class="right_box">
+						<view>
+							<text class="ovsty">
+								宿建德江
+							</text>
+						</view>
+						<view class="chat_item">
+							<text class="ovsty">二二二</text>
+						</view>
+					</view>
+					
+					<view class="chatbottom">
+						<view class="flexs chard">
+							<view class="chatcont">
+								<input class="chatconts" style="font-size: 60rpx;" cursor-spacing='30' placeholder-class= "phsy" placeholder="请输入聊天内容" />
+							</view>
+							<view class="flexs insend">
+								<view class="sendbut">
+									<button class="sendbuts">
+										<text style="color: #fff;" class="ovsty">发送</text>
+									</button>
+								</view>
+								<view class="adImg" @click="showAction">
+									<image class="sedimg" src="/static/img/ad1.png"></image>
+								</view>
+							</view>
+						</view>
+						<view v-if="actshow" class="sele-action">
+							<view class="">
+								<!-- <text>1222</text> -->
+							</view>
+						</view>
+					</view>
+				</view>
+				
+			</uni-popup>
+		
+		</view>
+		<view class="op-height">
+			<uni-popup ref="popupover">
+				
+				<view class="popup-content" v-if="tabs==4">
+					<view class="chatclose">
+						<uni-icons @click="chatclose" type="closeempty" size="50"></uni-icons>
+					</view>
+					<view class="crtitle">
+						<text class="ovsty">你确定结束会议吗？</text>
+					</view>
+					<view class="">
+						<button class="overbutton">
+							<text class="ovsty" @click="overMeeting" style="color: #FA4F1A;">离开会议</text>
+						</button>
+					</view>
+					
+					<view v-if="is_host" class="">
+						<button class="overbutton">
+							<text class="ovsty" @click="finishMeeting" style="color: #FA4F1A;">结束会议</text>
+						</button>
+					</view>
+					
+					<view class="">
+						<button class="canbutton" @click="iscanpop">
+							<text class="ovsty" style="color: #fff;">取消</text>
+						</button>
+					</view>
+				</view>
+				<view class="popup-content" v-if="tabs==5">
+					<view class="flexs">
+						<view class="setName">
+							<text class="ovsty">设置</text>
+						</view>
+						<view class="chatclose">
+							<uni-icons @click="chatclose" type="closeempty" size="60"></uni-icons>
+						</view>
+					</view>
+					
+					<view class="inflex">
+						<view class="ingard" @click="ioTabs(6)">
+							<view class="qdimg">
+								<image style="width: 100rpx;height: 100rpx;" src="../../static/img/qd.png"></image>
+							</view>
+							<view class="aNames">
+								<text class="ovsty">签到</text>
+							</view>
+						</view>
+						<view class="ingard" @click="ioTabs(7)">
+							<view class="qdimg">
+								<image style="width: 100rpx;height: 100rpx;" src="../../static/img/gg.png"></image>
+							</view>
+							<view class="aNames">
+								<text class="ovsty">
+									公告
+								</text>
+							</view>
+						</view>
+						<view class="ingard" @click="ioTabs(8)">
+							<view class="qdimg">
+								<image style="width: 100rpx;height: 100rpx;" src="../../static/img/lt.png"></image>
+							</view>
+							<view class="aNames">
+								<text class="ovsty">
+									聊天设置
+								</text>
+							</view>
+						</view>
+						<view class="ingard" @click="ioTabs(9)">
+							<view class="qdimg">
+								<image style="width: 100rpx;height: 100rpx;" src="../../static/img/mem.png"></image>
+							</view>
+							<view class="aNames">
+								<text class="ovsty">
+									成员管理
+								</text>
+							</view>
+						</view>
+					</view>
+					
+					
+				</view>
+				<view class="popup-content" style="height: 2400rpx" v-if="tabs==6">
+					<view class="inflex qdfef">
+						<view>
+							<text class="ovsty">签到</text>
+						</view>
+						<view>
+							<uni-icons @click="chatclose" type="closeempty" size="50"></uni-icons>
+						</view>
+					</view>
+					<view class="inflex Qdmess">
+						<view class="qdpos"  @click="qdChange(1)">
+							<text  class="ovsty">发起签到</text>
+							<view :class="qstatus==1?'qsactives':'qsmotice'"></view>
+						</view>
+						<view class="adpos" @click="qdChange(2)">
+							<text class="ovsty">签到记录</text>
+							<view :class="qstatus==2?'qsactives':'qsmotice'"></view>
+						</view>
+					</view>
+					
+					<block v-if="qstatus==1">
+						<!-- <view  class="adcontent">
+							<textarea style="font-size: 30px;height: 600rpx;" placeholder-class= "phsy" placeholder="请输入签到说明"></textarea>
+						</view> -->
+						
+						<block v-if="is_host">
+							<view  class="qsMes">
+								<text style="text-align: left;" class="ovsty">							
+									发起签到后，其他参与成员将收到签到应用通知，成员签到后可以在记录中查看
+								</text>
+							</view>
+							
+							<view  class="qsub" @click="nowSignin(sign_in==1?0:1)">
+								<button>
+									<text class="nowseng">{{sign_in==1?'关闭签到':'立即发起'}}</text>
+								</button>
+							</view>
+						</block>
+						<block v-else>
+							<view  class="adcontent">
+								<textarea v-model="content" style="font-size: 30px;height: 600rpx;" placeholder-class= "phsy" placeholder="请输入签到说明">
+								</textarea>
+							</view>
+							<view  class="qsMes" style="padding-top: 30rpx;">
+								<text style="text-align: left;" class="ovsty">							
+									成员签到后可以在记录中查看
+								</text>
+							</view>
+							
+							<view  class="qsub" style="margin-top: 200rpx;" @click="otherSignin">
+								<button>
+									<text class="nowseng">签到</text>
+								</button>
+							</view>
+						</block>
+					</block>
+					<block  v-if="qstatus==2">
+						<scroll-view style="height: 1800rpx;" @scrolltolower="onReachScollBottom2" scroll-y="true" :scroll-top="scrollTop" :scroll-with-animation="true">
+						<view class="flexs qddeit" v-for="(item,index) in sglist" :key="item.id">
+							<view class="qdImg-q">
+								<image v-if="item.user.avatar_file_url"
+								 class="sgimg" :src=item.user.avatar_file_url></image>
+								<image v-else class="sgimg" src="../../static/img/logo.png"></image>
+							</view>
+							<view class="qdName">
+								<view>
+									<text class="ovsty adname">
+										{{item.user.username}}
+									</text>
+								</view> 
+								<view class="inflex serfl">
+									<view class="">
+										<text class="ovsty  qdfs">签到时间</text>
+									</view>
+									<view>
+										<text  class="ovsty  qdfs">
+											{{getCurrentTime(item.created_at)}}
+										</text>
+									</view>
+								</view>
+							</view>
+							<view class="qdButton">
+								<button>
+									<text style="color: #fff;" class="ovsty">已签到</text>
+								</button>
+							</view>
+						</view>
+						<view v-if="sglist.length <=0" class="">
+							<text style="font-size: 58rpx;text-align: center;margin-top: 40px;">暂无签到记录</text>
+						</view>
+						
+						</scroll-view>																																															
+					</block>
+					
+				</view>
+				<view class="popup-content" style="height: 1600rpx" v-if="tabs==7">
+					<view class="inflex qdfef">
+						<view>
+							<text class="ovsty">公告</text>
+						</view>
+						<view>
+							<uni-icons @click="chatclose" type="closeempty" size="50"></uni-icons>
+						</view>
+					</view>
+					
+					<view class="noticeCont">
+						<view class="gztext">
+							<textarea  style="font-size: 60rpx;" placeholder-class= "phsy" placeholder="请输入公告内容">
+								
+							</textarea>
+							<view class="busend">
+								<text style="color: #fff;" class="ovsty">发送</text>
+							</view>
+						</view>
+						
+						
+					</view>
+					
+					
+					
+				</view>
+				<view class="popup-content" style="height: 2000rpx" v-if="tabs==8">
+					<view class="inflex qdfef">
+						<view>
+							<text class="ovsty">
+								聊天设置
+							</text>
+						</view>
+						<view >
+							<uni-icons @click="chatclose" type="closeempty" size="50"></uni-icons>
+						</view>
+					</view>
+					
+					<view class="chat-set">
+						<view class="chatPas">
+							<text style="text-align: left;font-weight: 600;" class="ovsty">
+								会议中聊天权限
+							</text>
+						</view>
+						<view class="inflex newchat swline">
+							<view>
+								<text class="ovsty">允许聊天</text>
+							</view>
+							<view class="">
+								<image class="chatimg" v-if="onshow" src="/static/img/no.png"></image>
+								<image class="chatimg" v-else src="/static/img/off.png"></image>
+							</view>
+							
+						</view>
+						<view class="inflex newchat swline">
+							<view>
+								<text class="ovsty">
+									允许私聊主持人
+								</text>
+							</view>
+							<view class="">
+								<image class="chatimg" v-if="onshow1" src="/static/img/no.png"></image>
+								<image class="chatimg" v-else src="/static/img/off.png"></image>
+							</view>
+							
+						</view>
+						<view class="inflex newchat swline">
+							<view>
+								<text class="ovsty">全体成员禁言</text>
+							</view>
+							<view class="">
+								<image class="chatimg" v-if="onshow2" src="/static/img/no.png"></image>
+								<image class="chatimg" v-else src="/static/img/off.png"></image>
+							</view>
+							
+						</view>
+					</view>
+					
+					
+					
+				</view>
+				<view class="popup-content" style="height: 2200rpx;background-color: #f5f5f5;" v-if="tabs==9">
+					<view class="inflex swline">
+						<view class="">
+							<text class="ovsty">成员管理</text>
+						</view>
+						<view >
+							<uni-icons @click="chatclose" type="closeempty" size="50"></uni-icons>
+						</view>
+					</view>
+					<scroll-view style="height: 2000rpx;" @scrolltolower="onReachScollBottom" scroll-y="true" :scroll-top="scrollTop" :scroll-with-animation="true">
+					
+					
+					<view class="memList">
+						<view class="inflex serfl">
+							<view class="search-input">
+								<uni-search-bar style="font-size: 60rpx;" placeholder="输入搜索内容" bgColor="#fff"   :focus="false" v-model="searchValue" ntve="nts" cancelButton="none" font="60" radius="12" width="1028" shight="140"></uni-search-bar>
+							</view>
+							<view>
+								<text style="color: #128DDA; font-size: 60rpx;">取消</text>
+							</view>
+						</view>
+						
+						
+						<view class="mem-with swline" v-for="(citem,cindex) in objUserIdList" :key="citem.userId">
+							<view>
+								<view class="allfx">
+									<view><text style="font-size: 40px;margin-right: 20px;font-weight: bold;">{{cindex+1}}</text></view>
+									<view class="memImg">
+										<image class="memimgs" v-if="citem.avatar" :src=citem.avatar></image>
+										<image class="memimgs" v-else src="../../static/img/sm.jpg"></image>
+									</view>
+									<view class="memName">
+										<view>
+											<text class="ovsty adlftf">{{citem.userName}}</text>
+										</view>
+										<view> 
+											<text class="ovsty adlftf">{{citem.is_host?'（主持人我）':''}}</text>
+										</view>
+									</view>
+									<view class="flexs memflex">
+										<!-- <image v-if="citem.is_host" class="ch1" src="/static/img/l1.png"></image> -->
+										
+										<image v-if="ispreviewStat==false" class="ch1 chlr" src="/static/img/k1.png">
+										</image>
+										
+										<image v-if="ispreviewStat==true" class="ch1 chlr" src="/static/img/nv.png">	
+										</image>
+														
+										<view  style="position: relative;height: 90px;">
+											
+											<view class="y1">
+												<view class="sexc" v-if="!setAudioStat" style="width: 54px; 
+												height: 54px; position: relative">
+													
+													<image  style="position: absolute; bottom: 0;
+													width: 54px;height: 54px" src="/static/img/mic-on.png" alt=""></image>
+													
+													<view  class="voleg"  :style="{'height':setheight}">
+														<image   style="position: absolute; bottom: 0;
+														width: 54px;height: 54px;"  alt="" src="/static/img/mic-green.png">
+														</image>
+													</view>
+												</view>
+												<view v-else style="width: 54px;
+												 height: 54px; position: relative">
+													
+													<image  style="position: absolute;
+													 bottom: 0;width: 54px;height: 54px;" src="/static/img/j1.png" >
+													 </image>
+											
+												</view>
+											</view>
+												
+										</view>
+									</view>
+								</view>
+														
+														
+							</view>
+							
+						</view>
+						
+											
+					</view>
+					
+					
+					<view class="flexs membutton">
+						<button class="membuttons" @click="allmemSov">
+							<text style="color: #fff;" class="ovsty">全体静音</text>
+						</button>
+						<button class="membuttons" @click="setMute('2')">
+							<text style="color: #fff;"  class="ovsty">
+								解除全体静音
+							</text>
+						</button>
+					</view>
+					<view class="op-height">
+						<uni-popup ref="popupvoice">
+							<view class="popup-content alpop">
+								<view class="">
+									<text class="allMso">
+										所有及新加入的成员将被静音
+									</text>
+								</view>
+								
+								<view class="inflex isButt">
+									<button class="allbut" @click="mcan">
+										<text class="ovsty">
+											取消
+										</text>
+									</button>
+									<button class="setmute" @click="setMute('1')">
+										<text class="ovsty ifc">
+											全体静音
+										</text>
+									</button>
+								</view>
+							</view>
+							
+						</uni-popup>
+					</view>
+					</scroll-view>
+				</view>
+				<view class="popup-content" style="height: 1200rpx" v-if="tabs==10">
+					<view class="inflex qdfef">
+						<view class="" >
+							<text class="ovsty" style="text-align: left;">选择邀请方式</text>
+						</view>
+						<view >
+							<uni-icons @click="chatclose" type="closeempty" size="50"></uni-icons>
+						</view>
+					</view>
+					
+					<view class="inflex ysflex">
+						<!-- <view class="sexc" @click="wxshareF(1)">
+							<image class="yimg-i" src="../../static/img/wxf.png"></image>
+							<view class="yimg-v">
+								<text class="ovsty">微信好友</text>
+							</view>
+						</view>
+						<view class="sexc" @click="wxshareF(2)">
+							<image class="yimg-i" src="../../static/img/wxp.png"></image>
+							<view class="yimg-v">
+								<text class="ovsty">朋友圈</text>
+							</view>
+						</view>
+						<view class="sexc">
+							<image class="yimg-i" src="../../static/img/wxf.png"></image>
+							<view class="yimg-v">
+								<text class="ovsty">QQ好友</text>
+							</view>
+						</view> -->
+						<view class="sexc" @click="wxshareFlink(1)">
+							<image class="yimg-i" src="../../static/img/wxp.png"></image>
+							<view class="yimg-v">
+								<text class="ovsty">分享链接</text>
+							</view>
+						</view>
+					</view>
+					
+					<view class="iscan" @click="iscanpop">
+						<button>
+							<text style="color: #fff;" class="ovsty">取消</text>
+						</button>
+					</view>
+					
+				</view>
+			</uni-popup>
+		</view>
+		
+				
+			<view class="bomtabr">
+				
+				<!-- <view class="enterBox">
+					<view class="flexs setinput">
+						<view class="m1">
+							<image style="width: 120rpx;height: 120rpx;" src="/static/img/m1.png"></image>
+						</view>
+						<view class="eninput">
+							<input @focus="getforece"  class="chatinput" placeholder-class= "phsy" placeholder="请输入聊天内容...." type="text" />
+						</view>
+					</view>
+				</view> -->
+				
+				<view class="bodHeight">
+					<view>
+						<view class="y1" @click="ioTabs(10)">
+							<image style="width: 120rpx;height: 120rpx;" src="/static/img/y1.png"></image>
+						</view>
+						<text class="bontab">邀请</text>
+					</view>
+					
+					<view>
+						<view class="y1" @click="startLocalPreview">
+							<image v-if="ispreviewStat==false" style="width: 120rpx;height: 120rpx" src="/static/img/k1.png">
+								
+							</image>
+							<image v-if="ispreviewStat==true" style="width: 120rpx;height: 120rpx" src="/static/img/nv.png"></image>
+						</view>
+						<text class="bontab">{{ispreviewStat?'停止视频':'开启视频'}}</text>
+					</view>
+					
+					
+					<view class="play-video">
+						<view   @click="setAudio" style="position: relative;height: 90px;">
+							
+								<view class="y1">
+										<view class="sexc" v-if="!setAudioStat" 
+										 style="width: 54px; height: 54px; position: relative">
+											<image  style="position: absolute; bottom: 0;width: 54px;height: 54px"
+											 src="/static/img/mic-on.png" alt=""></image>
+											<view  class="voleg"  :style="{'height':setheight}">
+												<image   style="position: absolute; bottom: 0;width: 54px;height: 54px;"  											alt="" src="/static/img/mic-green.png"></image>
+											</view>
+										</view>
+										<view v-else style="width: 54px; height: 54px; position: relative">
+											<image  style="position: absolute; bottom: 0;width: 54px;height: 54px;" 
+											 src="/static/img/j1.png"></image>
+										</view>
+									
+										<view class="sexc">
+											<text class="bontab">
+												{{!setAudioStat?'静音':'解除静音'}}
+											</text>
+										</view>
+								</view>
+								
+						</view>
+					</view>
+					<view @click="shareScreen">
+						<view class="y1">
+							<image v-if="!shareStat" style="width: 120rpx;height: 120rpx;" src="/static/img/g1.png"></image>
+							<image v-else style="width: 120rpx;height: 120rpx;" src="/static/img/g2.png"></image>
+						</view>
+						<text class="bontab">{{!shareStat?'共享屏幕':'停止共享'}}</text>
+					</view>
+					<block v-if="is_host">
+						<view @click="ioTabs(5)">
+							<view class="s1">
+								<image style="width: 120rpx;height: 120rpx;" src="/static/img/sz.png"></image>
+							</view>
+							<text class="bontab">设置</text>
+						</view>
+					</block>
+					<block v-else>
+						<view @click="ioTabs(6)">
+							<view class="s1">
+								<image style="width: 120rpx;height: 120rpx;" src="/static/img/sz.png"></image>
+							</view>
+							<text class="bontab">签到</text>
+						</view>
+					</block>
+				</view>
+				
+			</view>
+		
+			
+		</scroll-view>
+			
+			
+			
+		
+	</div>
+	
+</template>
+
+<script>
+		import permision from "@/TrtcCloud/permission.js";
+			import TrtcCloud from '@/TrtcCloud/lib/index';
+			import { TRTCAppScene, TRTCVideoStreamType, TRTCCloudDef,TRTCRoleType,TRTCVideoResolution,TRTCVideoResolutionMode   } from '@/TrtcCloud/lib/TrtcDefines';
+			import { genTestUserSig } from '@/debug/GenerateTestUserSig';
+			import TrtcLocalView from '@/TrtcCloud/view/TrtcLocalView';
+			import TrtcRemoteView from '@/TrtcCloud/view/TrtcRemoteView';
+			import $config from '@/common/config'
+			import voice from '@/service/api/voice'
+	export default {
+		components: {
+			TrtcLocalView: TrtcLocalView,
+			TrtcRemoteView: TrtcRemoteView,
+		},
+		data()
+		{
+			
+			return{
+				posSty:'absolute',
+				isbs:false,
+				content:'',
+				statusBar:0,
+				videoheight:20,
+				videowith:20,
+				fiexwi:0,
+				tabs:3,
+				actshow:false,
+				qstatus:1,
+				trtcCloud:'',
+				onshow:true,
+				onshow1:true,
+				onshow2:true,
+				setheight:'0px',
+				volId:'',
+				ttrtcCloud: null,
+				sdkAppId: 0,
+				userSig: '',
+				roomId: '',
+				userId: '',
+				appScene: TRTCAppScene.TRTCAppSceneVideoCall, // TRTCAppSceneVideoCall
+				isFrontCamera: true,
+				ispreviewStat:false,//设置开启或者关闭视频
+				streamType: TRTCVideoStreamType.TRTCVideoStreamTypeBig,
+				remoteUserIdList: [],
+				objUserIdList: [],
+				remoteAudioMuteState: false,
+				userName:'',
+				avatar:'',
+				mobile:'',
+				setAudioStat:false,
+				ayssetAudioStat:true,
+				shareheight:20,
+				setSlat:false,
+				shareStat:false,
+				seVoStat:true,
+				is_host:"",
+				isbgs:false,
+				roomtitle:'',
+				roomtime:'',
+				sign_in:'',
+				page:1,
+				page_size:10,
+				sglist:[],
+				ispage:true,
+				length_of_time:0
+				
+			}
+		},
+		onLoad(options) {
+			var that=this
+			uni.getSystemInfo({
+				success(e) {
+					let statusBar = 0
+					let customBar = 0
+					statusBar = e.statusBarHeight
+					customBar = e.statusBarHeight + 45;
+					that.statusBar=e.statusBarHeight+58; 
+					
+				}
+			});
+			
+			if(options.roomId && options.roomId !=undefined)
+			{
+				that.roomId=options.roomId
+			}
+			
+			if(options.userName && options.userName !=undefined)
+			{
+				that.userName=options.userName
+			}
+			if(options.mobile && options.mobile !=undefined)
+			{
+				that.mobile=options.mobile;
+				that.userId=options.mobile
+				
+			}
+			
+		
+		},
+		
+		
+		mounted()
+		{
+		
+			this.userId=this.mobile
+			this.avatar=uni.getStorageSync('avater')
+			
+			if(this.mobile)
+			{
+				if (uni.getSystemInfoSync().platform === 'android') {
+					permision.requestAndroidPermission('android.permission.RECORD_AUDIO');
+					permision.requestAndroidPermission('android.permission.CAMERA');
+				}
+				// 生成 userSig
+				const { sdkAppId, userSig } = genTestUserSig(this.mobile);
+				this.sdkAppId = sdkAppId;
+				this.userSig = userSig;
+				if (!sdkAppId || !userSig) {
+					uni.showToast({
+						title: '请填写 sdkAppId、userSig',
+						icon: 'none'
+					});
+				}
+				this.enterRoom()
+			}
+			
+			
+		},
+		unmounted() {
+			this.handleUninstallEvents();
+		},
+		onUnload() {
+			this.destroyInstance();
+			console.log('- onUnload');
+		},
+		onBackPress() {
+			this.destroyInstance();
+		},
+		
+		
+		
+		methods:{
+			goBack()
+			{
+				if(this.is_host)
+				{
+					this.tabs=4
+					this.$refs.popupover.open('bottom');
+				}else{
+					const pages = getCurrentPages()//获取页面栈
+					if (pages.length === 1) {//如果只有一个调用原生js
+						history.back()
+					} else {
+						uni.navigateBack({
+							delta: 1,
+						})
+					}
+					voice.setmicrophone({
+						code:this.roomId,
+						type:2
+					}).then(res=>{})
+				}
+				
+			},
+			onReachScollBottom2() {
+				this.page++
+				this.qdChange(2)
+				
+			},
+			getCurrentTime(t) {
+				
+				var date = new Date(t);//当前时间
+				
+				 var year = date.getFullYear() //年
+				 var month = this.repair(date.getMonth() + 1);//月
+				 var day = this.repair(date.getDate());//日
+				 var hour = this.repair(date.getHours());//时
+				 var minute = this.repair(date.getMinutes());//分
+				 var second = this.repair(date.getSeconds());//秒
+				 
+				 //当前时间 
+				 var curTime = year + "-" + month + "-" + day
+						 + " " + hour + ":" + minute + ":" + second;
+				 return curTime;
+			},
+					
+			 //若是小于10就加个0
+			  
+			  repair(i){
+				 if (i >= 0 && i <= 9) {
+					 return "0" + i;
+				 } else {
+					 return i;
+				 }
+			 },
+			// wxshareF(pams)
+			// {
+			// 	var that = this;
+			// 	//朋友微信好友 pams==1 好友 pams==2 朋友圈 WXSceneTimeline
+			// 	if(pams==1)
+			// 	{
+			// 		var sharepams='WXSceneSession'
+			// 	}else{
+			// 		var sharepams='WXSceneTimeline'
+			// 	}
+				
+			// 	uni.share({
+			// 		title:"会议标题:"+this.roomtitle,
+			// 		provider: "weixin",
+			// 		type: 0,
+			// 		href:'https://wangzhe-resource.oss-cn-chengdu.aliyuncs.com',
+			// 		scene: sharepams,
+			// 		summary:'会议时间:'+this.getCurrentTime(this.roomtime)+' 会议号:'+this.roomId,
+			// 		imageUrl:'https://wangzhe-resource.oss-cn-chengdu.aliyuncs.com/image/20221226/about.png',
+					
+			// 		success: function (res) {
+			// 		},
+			// 		fail: function (err) {
+			// 			console.log("fail:" + JSON.stringify(err));
+			// 		}
+			// 	});
+				
+			// },
+			
+			wxshareFlink(pams)
+			{
+				var that = this;
+				//朋友微信好友 pams==1 好友 pams==2 朋友圈 WXSceneTimeline
+				if(pams==1)
+				{
+					var sharepams='WXSceneSession'
+				}else{
+					var sharepams='WXSceneTimeline'
+				}
+				uni.share({
+					title:"会议标题:"+this.roomtitle,
+					provider: "weixin",
+					type: 1,
+					href:'https://wangzhe-resource.oss-cn-chengdu.aliyuncs.com',
+					scene: sharepams,
+					summary:'会议时间:'+this.getCurrentTime(this.roomtime)+
+					'预计会议时间:'+this.length_of_time/60+'小时'+' 会议号:'+this.roomId,
+					success: function (res) {
+					},
+					fail: function (err) {
+						console.log("fail:" + JSON.stringify(err));
+					},
+					
+				});
+				this.$refs.popupover.close()
+			},
+			allmemSov()
+			{
+				this.$refs.popupvoice.open('center')
+			},
+			mcan()
+			{
+				this.$refs.popupvoice.close()
+			},
+			allowChange()
+			{
+				this.seVoStat= !this.seVoStat
+			},
+			//全体静音
+			setMute(pam)
+			{
+				if(pam==1)
+				{
+					this.trtcCloud.muteAllRemoteAudio(true);
+					this.$refs.popupvoice.close()
+				}else{
+					uni.showToast({
+						title:'已解除全部静音',
+						icon:'none'
+					})
+					this.trtcCloud.muteAllRemoteAudio(false);
+				}
+				
+			},
+			setwichange(its)
+			{
+				this.isbgs =! this.isbgs
+				this.objUserIdList.map((item,index)=>{
+					if(item.userId==its.userId && item.userId !=this.userId)
+					{
+						this.isbs = ! this.isbs
+						this.isbgs=true
+						this.$set(item,"videoStat",false)
+					}
+				})
+			},
+			showAction()
+			{
+				this.actshow = !this.actshow
+			},
+			
+			getforece()
+			{
+				this.$refs.popup.open('bottom');
+				uni.hideKeyboard()
+			},
+			chatclose()
+			{
+				this.$refs.popup.close()
+				if(this.tabs !=1 || this.tabs !=2 || this.tabs !=3  )
+				{
+					this.$refs.popupover.close()
+				}
+			},
+			ioTabs(pams)
+			{
+				this.tabs=pams
+				
+				if(this.tabs !=1 || this.tabs !=2 || this.tabs !=3  )
+				{
+					this.$refs.popupover.open('bottom')
+				}
+			},
+			qdChange(pams)
+			{
+				this.qstatus=pams
+				if(pams==2)
+				{
+					if(!this.ispage)
+					{
+						return false
+					}
+					uni.showLoading({
+						title: '加载中...',
+						mask: false
+					});
+					voice.RecordSignin({
+						code:this.roomId,
+						page:this.page,
+						page_size:this.page_size
+					}).then(res=>{
+						uni.hideLoading()
+						if(res.code==200 && res.data.data.length >0)
+						{
+							if (this.page>1)
+							{
+								res.data.data=this.sglist.concat(res.data.data)
+							}
+		
+							this.sglist=res.data.data
+						}else{
+						if (res.data.data.length==0)
+						{
+							uni.hideLoading()
+							this.ispage=false
+							uni.showToast({
+								title:'没有更多数据!',
+								icon:'none',
+								duration:3000
+							})
+							return;
+						}
+					}
+					}).catch(err=>{
+						uni.showToast({
+							title:err.message,
+							icon:'none'
+						})
+					})
+				}
+			},
+			iscanpop()
+			{
+				this.$refs.popupover.close()
+			},
+			
+			// 结束会议
+			finishMeeting()
+			{
+				voice.finishMeet({code:this.roomId}).then(res=>{
+					if(res.code==200)
+					{
+						uni.showToast({
+							title:'会议结束！',
+							icon:'none'
+						})
+						this.objUserIdList=[]
+						this.$refs.popupover.close();
+						uni.navigateBack({
+						  delta:2// 可以不写，默认值为 1
+						})
+					}
+				})
+				
+				
+			},
+			//离开会议
+			overMeeting()
+			{
+				voice.exitMeet({code:this.roomId}).then(res=>{
+					if(res.code==200)
+					{
+						this.exitRoom()
+						
+					}
+				}).catch(err=>{
+					console.log('错误信息',err)
+					this.exitRoom()
+				})
+				
+				
+			},
+			//发起签到
+			nowSignin(pams)
+			{
+			
+				voice.memsignIn({
+					sign_in:pams,
+					code:this.roomId
+				}).then(res=>{
+					if(res.code==200)
+					{
+						if(this.sign_in==1)
+						{
+							this.sign_in=0
+							var mess='签到已关闭'
+						}else{
+							this.sign_in=1
+							var mess='签到已成功发起'
+						}
+						uni.showToast({
+							title:mess,
+							icon:'none'
+						})
+						voice.otherSignin({
+							code:this.roomId,
+							content:this.content?this.content:''
+						}).then(res=>{
+							
+						}).catch(err=>{
+							
+							if(err.message)
+							{
+								uni.showToast({
+									title:err.message,
+									icon:'none'
+								})
+							}
+							
+						})
+						
+					}
+				})
+				
+			},
+			//会员签到
+			otherSignin()
+			{
+				
+				voice.otherSignin({
+					code:this.roomId,
+					content:this.content?this.content:''
+				}).then(res=>{
+					console.log('res',res)
+					if(res.code==200)
+					{
+						uni.showToast({
+							title:'签到成功！',
+							icon:'none'
+						})
+					}
+				}).catch(err=>{
+					console.log('二人若',err)
+					if(err.message)
+					{
+						uni.showToast({
+							title:err.message,
+							icon:'none'
+						})
+					}
+					
+				})
+			},
+			
+							
+							destroyInstance() {
+								if (this.trtcCloud) {
+									TrtcCloud.destroyInstance();
+									this.trtcCloud = null;
+								}
+							},
+							createTrtcCloud() {
+								this.trtcCloud = TrtcCloud.createInstance();
+								this.handleEvents();
+							},
+							enterRoom() {
+								
+								try {
+									// 【1】创建实例 
+									this.createTrtcCloud();
+									// 【2】进房
+									let role=TRTCRoleType.TRTCRoleAnchor
+									const { roomId, userId, sdkAppId, appScene, userSig,userName} = this;
+									let param = { roomId: +roomId, userId, sdkAppId, userSig,role };
+									if (!this.remoteUserIdList.includes(userId))
+									{
+										
+										this.remoteUserIdList.push(userId);
+										this.objUserIdList.push({
+											userId,
+											userName:'',
+											setheight:'0px',
+											avatar:'',
+											ayssetAudioStat:'',
+											setWh:false,
+											is_host:"true"
+										})
+										
+										let user_token = uni.getStorageSync('token');
+										let header = $config.HEADER
+										header[$config.TOKENNAME] = 'Bearer '+user_token
+										uni.request({
+											url:$config.SERVER_PATH+'voice/user/info',
+											method:'GET',
+											data:{username:userId,code:this.roomId},
+											header,
+											success: (res) => {
+												
+												if(res.data.code==200)
+												{
+
+													const asdata=res.data.data
+													console.log('爱仕达多多',asdata)
+													this.length_of_time=asdata.voice_info.length_of_time
+													this.is_host=asdata.is_host
+													this.objUserIdList.map((item,index)=>{
+														if(item.userId==asdata.username && asdata.username)
+														{
+															
+															this.$set(item,"userName",asdata.name)
+															this.$set(item,"avatar",asdata.avatar_file_url?
+															asdata.avatar_file_url:'../../static/img/logo.png')
+															this.$set(item,"is_host",asdata.is_host)
+															this.roomtitle=asdata.voice_info.title
+															this.roomtime=asdata.voice_info.start_at
+															this.sign_in=asdata.voice_info.sign_in
+															if(!asdata.equipment_power.microphone)
+															{
+																
+																this.setAudioStat = true
+																this.trtcCloud.muteLocalAudio(true)
+																this.$set(item,"ayssetAudioStat",false)
+																voice.setmicrophone({
+																	code:this.roomId,
+																	type:1
+																}).then(res=>{
+																	
+																})
+															}else{
+																this.$set(item,"ayssetAudioStat",true)
+																this.setAudioStat = false
+																voice.setmicrophone({
+																	code:this.roomId,
+																	type:2
+																}).then(res=>{
+																	
+																})
+															}
+															if(asdata.equipment_power.camera && asdata.is_host)
+															{
+																this.ispreviewStat = !this.ispreviewStat
+																this.trtcCloud.startLocalPreview(this.isFrontCamera, item.userId);
+																
+															}	
+														}
+													})
+													
+												}
+												
+											}
+											
+										})
+										
+									}
+									
+								this.trtcCloud.enterRoom(param, appScene);
+								this.startLocalAudio();
+								
+								this.trtcCloud.enableAudioVolumeEvaluation(300);
+								} catch (error) {
+									console.log(`enterRoom error = ${JSON.stringify(error)}`);
+								}
+							},
+							
+							//停止本地音频
+							setAudio()
+							{
+								
+								this.setAudioStat = !this.setAudioStat
+								this.ayssetAudioStat = !this.ayssetAudioStat
+								this.objUserIdList.map((item,index)=>{
+									if(item.userId==this.userId)
+									{
+										item.ayssetAudioStat=!this.setAudioStat
+									}
+								})
+								
+								if(this.setAudioStat)
+								{
+									
+									voice.setmicrophone({
+										code:this.roomId,
+										type:1
+									}).then(res=>{
+										
+									})
+									
+								}else{
+									voice.setmicrophone({
+										code:this.roomId,
+										type:2
+									}).then(res=>{
+										
+									})
+								}
+								
+								this.trtcCloud.muteLocalAudio(this.setAudioStat)
+								
+								
+							},
+							
+							exitRoom() {
+								try {
+									this.stopLocalPreview();
+									
+									this.stopRemoteView();
+									
+									this.stopLocalAudio();
+									this.trtcCloud.exitRoom();
+									this.remoteUserIdList = [];
+									this.objUserIdList = [];
+									this.$refs.popupover.close()
+									uni.navigateBack({
+									  delta:2// 可以不写，默认值为 1
+									})
+								} catch (e) {
+									console.log('鹅鹅鹅鹅鹅鹅饿鹅鹅鹅饿',e)
+									// TODO handle the exception
+								}
+							},
+							//屏幕共享
+							shareScreen()
+							{			
+								if(this.ispreviewStat)
+								{
+									this.stopLocalPreview()
+									this.ispreviewStat=false
+								}
+								this.shareStat =! this.shareStat
+								if(this.shareStat)
+								{
+									const encParams = {
+									  videoResolution: TRTCVideoResolution.TRTCVideoResolution_640_360,
+									  videoResolutionMode: TRTCVideoResolutionMode.TRTCVideoResolutionModePortrait,
+									  videoFps: 15,
+									  videoBitrate: 900,
+									  minVideoBitrate: 200,
+									  enableAdjustRes: false,
+									};
+									this.trtcCloud.startScreenCapture(TRTCVideoStreamType.TRTCVideoStreamTypeSub, encParams);
+								}else{
+									this.trtcCloud.stopScreenCapture();
+								}
+									
+							},
+							
+							
+							// 本地预览
+							startLocalPreview() {
+								if(!this.is_host)
+								{
+									uni.showToast({
+										title:'目前只有主持人权限才能发起视频！',
+										icon:'none'
+									})
+									return
+								}
+								if(this.shareStat)
+								{
+									this.ispreviewStat=true
+									this.shareStat=false
+									this.trtcCloud.stopScreenCapture();
+									this.trtcCloud.startLocalPreview(this.isFrontCamera, this.userId);
+									
+								}else{
+									this.ispreviewStat = !this.ispreviewStat
+									if(this.ispreviewStat)
+									{
+									   this.trtcCloud.startLocalPreview(this.isFrontCamera, this.userId);
+									}else{
+										this.stopLocalPreview()
+									}
+								}
+								
+							
+							},
+							stopLocalPreview() {
+								this.trtcCloud.stopLocalPreview();
+							},
+							  startLocalAudio() {
+								this.trtcCloud.startLocalAudio();
+							  },
+							  stopLocalAudio() {
+								this.trtcCloud.stopLocalAudio();
+							  },
+							stopRemoteView() {
+								
+								for (let i = 0; i < this.objUserIdList.length; i++) {
+									
+									this.trtcCloud.stopRemoteView(this.objUserIdList[i].userId, this.streamType);
+								}
+							},
+							muteAllRemoteAudio() {
+								this.remoteAudioMuteState = !this.remoteAudioMuteState;
+								this.trtcCloud.muteAllRemoteAudio(this.remoteAudioMuteState);
+							},
+						
+							handleEvents() {
+							this.trtcCloud.on('onWarning', (res) => {
+								
+							});
+							this.trtcCloud.on('onError', (res) => {
+								console.log('- onError: ', JSON.stringify(res));
+								uni.showToast({
+									title: `error: ${JSON.stringify(res)}`,
+									icon: 'none',
+								});
+							});
+							this.trtcCloud.on('onEnterRoom', (result) => {
+								console.log(`- onEnterRoom = ${result}`);
+								if (result > 0) {
+									uni.showToast({
+										title: `进房成功`,
+										icon: 'none',
+									});
+								} else {
+									console.log(`enter room failed，error code = ${result}`);
+								}
+							});
+							this.trtcCloud.on('onExitRoom', (reason) => {
+								const reasonList = ['主动调用 exitRoom 退房',
+								 '被服务器踢出当前房间', '当前房间整个被解散'];
+								
+								// uni.showToast({
+								// 	title: `退房 ${reasonList[reason]}`,
+								// 	icon: 'none',
+								// 	duration: 1000
+								// });
+								
+							});
+							this.trtcCloud.on('onFirstVideoFrame', (res) => {
+								console.log('onFirstVideoFrame',res)
+								this.videoheight=res.height+50
+								// this.videoheight=200+50
+								this.videowith=res.width
+								
+							});
+							//用户对象
+							
+							this.trtcCloud.on('onRemoteUserEnterRoom', (userId) => {
+								if (!this.remoteUserIdList.includes(userId)) {
+									this.remoteUserIdList.push(userId);
+										this.objUserIdList.push({
+											userId,
+											setheight:'0px',
+											ayssetAudioStat:this.ayssetAudioStat?false:true,
+											setWh:false,
+											userName:'',
+											avatar:''
+											
+										})
+										let user_token = uni.getStorageSync('token');
+										let header = $config.HEADER
+										header[$config.TOKENNAME] = 'Bearer '+user_token
+										uni.request({
+											url:$config.SERVER_PATH+'voice/user/info',
+											method:'GET',
+											data:{username:userId,code:this.roomId},
+											header,
+											success: (res) => {
+												if(res.data.code==200)
+												{
+													
+													const asdata=res.data.data
+													this.objUserIdList.map((item,index)=>{
+														
+														if(item.userId==asdata.username && asdata.username)
+														{
+															
+															this.$set(item,"userName",asdata.name)
+															this.$set(item,"avatar",asdata.avatar_file_url?
+															asdata.avatar_file_url:'../../static/img/logo.png')
+															// this.$set(item,"is_host",asdata.is_host)
+															// this.sign_in=asdata.voice_info.sign_in
+														
+															
+														}
+													})
+													
+													
+												}
+												
+											}
+											
+										})
+										
+								}
+								
+							
+							console.log('远端数据hh',this.objUserIdList)
+							});
+							
+							this.trtcCloud.on('onUserSubStreamAvailable', (res) => {
+							  const { userId, available } = res;
+							  
+							  this.objUserIdList.map((item,index)=>{
+							  	if(item.userId==userId)
+							  	{
+									this.$set(item,"alseStat",true)
+									if(available)
+									{
+										if(!this.isbgs)
+										{
+											this.$set(item,"videoStat",true)
+										}
+									}else{
+										this.$set(item,"videoStat",false)
+									}
+									this.$set(item,"setimg",true)
+							  	}
+								
+							  })
+							  if(available)
+							  {
+								  this.shareheight=1280,
+								  
+								  this.trtcCloud.startRemoteView(userId, TRTCVideoStreamType.TRTCVideoStreamTypeSub, userId);
+							  }else{
+								  this.trtcCloud.stopRemoteView(userId, TRTCVideoStreamType.TRTCVideoStreamTypeSub);
+							  }
+							});
+							
+							this.trtcCloud.on('onUserVideoAvailable', (res) => {
+								const {
+									userId,
+									available
+								} = res;
+								
+								if(available)
+								{
+									
+									if (userId && available && this.remoteUserIdList.includes(userId)) {
+										this.trtcCloud.startRemoteView(userId, this.streamType, userId);
+									
+									}
+								}else{
+									this.trtcCloud.stopRemoteView(userId, this.streamType);
+								}
+								this.objUserIdList.map((item,index)=>{
+									if(item.userId==userId)
+									{
+										if(available)
+										{
+											if(!this.isbgs)
+											{
+												this.$set(item,"videoStat",true)
+											}
+										}else{
+											
+											this.$set(item,"videoStat",false)
+										}
+										this.$set(item,"setimg",true)
+									}
+								})
+								
+								
+							});
+							this.trtcCloud.on('onRemoteUserLeaveRoom', (res) => {
+							  const { userId, reason } = res;
+							  if (userId) {
+								  
+								const list = this.remoteUserIdList.filter(val => val !== userId);
+								this.remoteUserIdList = list;
+								
+								const list2 = this.objUserIdList.filter(val => val.userId !== userId);
+								this.objUserIdList = list2;
+							  }
+							});
+					
+						
+							//监听用户打开或者静音
+							this.trtcCloud.on('onUserAudioAvailable',(res)=>{
+								console.log('res',res)
+								this.objUserIdList.map((item,index)=>{
+									if(item.userId==res.userId)
+									{
+										if(res.available)
+										{
+											item.ayssetAudioStat=true
+										}else{
+											item.ayssetAudioStat=false
+										}
+										
+									}
+								})
+							});
+							this.trtcCloud.on('onScreenCaptureStarted', (res) => {
+									console.log('onScreenCaptureStarted ==== ', res);
+								});
+							this.trtcCloud.on('onScreenCapturePaused', (res) => {
+								console.log('onScreenCapturePaused ==== ', res);
+							});
+							this.trtcCloud.on('onScreenCaptureResumed', (res) => {
+								console.log('onScreenCaptureResumed ==== ', res);
+							});
+							this.trtcCloud.on('onScreenCaptureStopped', (res) => {
+								console.log('onScreenCaptureStopped ==== ', res);
+							});
+							
+						
+							this.trtcCloud.on('onUserVoiceVolume', (result) => {
+						        result.userVolumes.forEach(({ userId, volume }) => {                  
+	                                    if (volume >= 50) 
+	                                    {
+											if(userId == this.userId)
+												{
+													this.volId=userId
+													if(volume >=60)
+													{
+														this.setheight=`60px`
+													}else{
+														this.setheight=`${volume}px`
+													}
+												}
+		                                        this.objUserIdList.map((item,index)=>{
+		                                            if (item.userId == userId) {
+		                                                if(volume >=60)
+		                                                {
+		                                                    this.$set(item,"setheight",`60px`)
+		                                                    
+		                                                }else{
+		                                                    this.$set(item,"setheight",`${volume}px`)   
+		                                                }
+		                                            }
+		                                        })
+	                                    } else {
+						                                        
+	                                        this.setheight=`0px`
+	                                        this.objUserIdList.map((item,index)=>{
+	                                            if (item.userId == userId) {
+	                                                item.setheight=`0px`
+	                                            }
+	                                        })
+	                                        
+	                                    }
+						                                    
+		                                });
+		                            });
+						},
+						handleUninstallEvents() {
+							this.trtcCloud.off('*');
+						}
+					
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	/* #ifdef APP-PLUS-NVUE */
+	.lists{
+		flex:1;
+		
+	}
+	.morebig {
+		width: 1200px;
+		height: 1550px;
+		position: fixed;
+		top: 0;
+		left: 0;
+	}
+	.rebig {
+		width: 200px;
+		height:200px;
+		flex: 1;
+	}
+	.pos_ab {
+		position: absolute!important;
+		top: 0;
+		left: 0;
+		right: 0;
+	}
+	
+	.nfs{
+		z-index: 99;
+		// background-color: #fff;
+		// display: flex;
+		
+		padding-left: 0;
+	}
+	
+	.sumap{
+		
+		align-items: center;
+	
+		color: #666;
+		font-size: 28rpx;
+		
+		position: sticky;
+		
+		z-index: 111;
+		flex-direction: row;
+		padding-left: 20rpx;
+		padding-bottom: 8rpx;
+		font-size: 30px;
+		justify-content: space-between;
+	}
+	
+	.overmeet{
+		
+		padding-right: 32rpx;
+		
+	}
+	.me1{
+		font-size: 40rpx;
+		font-weight: 600;
+		color: #fff;
+	}
+	.me2{
+		color: #EC5354;
+		font-size: 30rpx;
+	}
+	.hostmain{
+		text-align: center;
+		padding-top: 32px;
+		font-size: 14px;
+		
+		
+	}
+	.huisetimg{
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+	}
+	.sexc{
+		align-items: center;
+		justify-content: center;
+	}
+	
+	
+	
+	.setopts{
+		opacity: 0;
+	
+	}
+	.notopts{
+		opacity: 1;
+	
+	}
+	.ifds{
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+	}
+	.pigm{
+		width: 120rpx;
+		height: 120rpx;
+		border-radius: 120rpx;
+		border: 1px solid #212526;
+	}
+	.romfont{
+		font-size: 30rpx;
+		text-align: center;
+		padding-top: 20rpx;
+	}
+	
+	.reFont{
+		font-size: 28rpx;
+		font-weight: 500;
+		color: #fff;
+	}
+	
+	.hostmp{
+		padding-top: 14rpx;
+		text-align: center;
+		
+	}
+	
+	.flexs{
+		flex-direction: row;
+	}
+	.otherImg{
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		justify-content: space-around;
+		padding-top: 40rpx;
+		flex-direction: row;
+		
+	}
+	.chard{
+		justify-content: space-between;
+	}
+	.otimg{
+		// margin-left: 80rpx;
+		margin: 20px 40px;
+		// padding-bottom: 50rpx;
+	}
+	
+	.setborder{
+		border: 1px solid #ccc;
+	}
+	
+	.bomtabr{
+		position: fixed;
+		left: 0;
+		right: 0;
+		
+		bottom: -1px;
+		background-color: #212526;
+		z-index: 9999;
+		border-bottom: 2px solid #212526;
+	}
+	
+	.bodHeight,.enterBox{
+		padding: 20rpx 52rpx;
+		
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.bontab{
+		font-size: 30rpx;
+		text-align: center;
+		color: #fff;
+	}
+	.bodHeight{
+		font-size: 24rpx;
+		color: #333;
+	}
+	
+	.enterBox{
+		background-color: #F5F5F5;
+	}
+	.setinput{
+		justify-content: flex-start;
+		align-items: center;
+	}
+	.eninput{
+		margin-left: 20rpx;
+	}
+	.chatinput{
+		background: #fff;
+		height: 62rpx;
+		line-height: 52rpx;
+		width: 420rpx;
+		border-radius: 12rpx;
+		text-align: left;
+		padding-left: 40rpx;
+		font-size: 30rpx;
+	}
+	
+	.y1{
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+	}
+	.ovsty{
+		font-size: 32rpx;
+		text-align: center;
+	}
+	.adname{
+		padding-left: 12rpx;
+		padding-bottom: 16rpx;
+		text-align: left;
+		font-size: 28rpx;
+		font-weight: 500;
+	}
+	.adlftf{
+		text-align: left;
+		
+	}
+	.qdfs{
+		text-align: left;
+		font-size: 22rpx;
+		padding-left: 12rpx;
+		color: #666;
+	}
+	.popup-content{
+		height: 600rpx;
+		padding: 0;
+		background-color: #fff;
+		border-radius: 20rpx;
+	}
+	.chetFlex{
+		text-align: center;
+		position: relative;
+		padding-top: 28rpx;
+		padding-left: 32rpx;
+	}
+	.othchat{
+		text-align: left;
+		padding: 32rpx;
+	}
+		
+	.setName{
+		padding: 32rpx;
+		font-weight: 600;
+		font-size: 28rpx;
+	}
+	.als-bom{
+		border-bottom: 2rpx solid #F0F0F0;
+		width: 100%;
+	}
+	
+	.adcontent{
+		margin: 60rpx 52rpx;
+		background-color: #F4F7FD;
+	
+		border-radius: 10rpx;
+	}
+	.adcontent{
+		text-align: left;
+		padding: 20rpx;
+	}
+	.chatclose{
+		position: absolute;
+		right: 0;
+		top: 0;
+		padding-top: 28rpx;
+		padding-right: 32rpx;
+	}
+	.chatbottom{
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		padding: 60rpx 0;
+	}
+	.chatcont{
+		padding-left: 32rpx;
+	}
+	.chatconts{
+		text-align: left;
+		padding-left: 18rpx;
+		background-color: #F5F9F9;
+		width: 428rpx;
+		height: 66rpx;
+		border-radius: 12rpx;
+	}
+	.insend{
+		padding-right: 28rpx;
+		align-items: center;
+		
+	}
+	.sendbut{
+		background-color:#128DDA ;
+		font-size: 24rpx;
+		padding: 14rpx 34rpx;
+		border-radius: 10rpx;
+	}
+	
+	.sedimg{
+		width: 58rpx;
+		height: 58rpx;
+		margin-left: 20rpx;
+	}
+	
+	.left_box {
+				
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: flex-start;
+		flex-direction: column;
+		padding: 10rpx 32rpx;
+		margin-bottom: 20rpx;
+		margin-top: 60rpx;
+		text-align: left;
+		.chat_item {
+			// width: 72%;
+			margin-left: 52rpx;
+			margin-bottom: 22rpx;
+			margin-top: 12rpx;
+			// height: auto;
+			border-radius: 10rpx;
+			// box-sizing: border-box;
+			padding: 20rpx 40rpx;
+			background: #E4F5FF;
+			color: #000;
+			
+			position: relative;
+
+			
+		}
+
+	
+	}
+	.chat_item{
+		position: relative;
+	}
+	
+	.right_box {
+				
+		// display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		align-items: flex-end;
+		flex-direction: column;
+		padding: 10rpx 0;
+		padding-right: 32rpx;
+		margin-bottom: 20rpx;
+		text-align: left;
+		font-size: 28rpx;
+		
+	
+		.chat_item {
+			
+			border-radius: 10rpx;
+			padding: 20rpx 40rpx;
+			margin-right: 52rpx;
+			margin-top: 12rpx;
+			background: #128DDA;
+			border: 1rpx solid #128DDA;
+			position: relative;
+			
+		}
+
+		// .chat_item:after,
+		.chat_item:before {
+			border: solid transparent;
+			// content: ' ';
+			height: 0;
+			left: 100%;
+			position: absolute;
+			width: 0;
+		}
+
+		
+		.chat_item:before {
+			border-width: 12rpx;
+			border-left-color: #128DDA;
+			top: 40.8%;
+		}
+	}
+	
+	.sele-action{
+		text-align: left;
+		padding: 40rpx 32rpx;
+	}
+	.crtitle{
+		
+		color: #666;
+		padding-top: 82rpx;
+		padding-bottom: 32rpx;
+	}
+	.overbutton,.canbutton{
+		margin: 32rpx 132rpx;
+		font-size: 28rpx;
+		border-radius: 16rpx;
+		
+	}
+	.overbutton
+	{
+		background: #F4F7FD;
+		padding: 20rpx 0;
+		color: #FA4F1A;
+	}
+	.canbutton{
+		margin-top: 40rpx;
+		background-color: #128DDA;
+		padding: 20rpx 0;
+		color: #fff;
+	}
+	.inflex{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		padding:0 20rpx;
+		
+	}
+	.serfl{
+		align-items: center;
+		padding: 0;
+		justify-content: flex-start;
+	}
+	.newchat{
+		padding: 0;
+	}
+	.qdfef{
+		padding: 32rpx;
+	}
+	.ingard{
+		margin-bottom: 52rpx;
+		margin-top: 33rpx;
+		flex: 1;
+		margin: 20px;
+		font-size: 24rpx;
+		color: #666;
+	}
+	
+	.aNames{
+		padding-top: 12rpx;
+	}
+	.qdimg{
+		
+		background: #F7F7F7;
+		padding: 28rpx 26rpx;
+		border-radius: 8rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.sername{
+		font-size: 28rpx;
+		font-weight: 600;
+	}
+	
+	.qsMes{
+		font-size: 28rpx;
+		padding-top: 132rpx;
+		color: #666;
+		padding-left: 52rpx;
+		padding-right: 52rpx;
+		text-align: left;
+	}
+	.qsub{
+		margin: 400rpx 56rpx 123rpx 56rpx;
+		background-color: #128DDA;
+		padding: 26rpx 0;
+		color: #fff;
+		border-radius: 20rpx;
+	}
+	
+	.qddeit{
+		padding: 60rpx 52rpx;
+		align-items: center;
+		justify-content: flex-start;
+		text-align: left;
+		padding-bottom: 26rpx;
+		border-bottom: 4rpx solid #F5F5F5;
+	}
+	.sgimg{
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 100rpx;
+		border: 1rpx solid #128DDA;
+	}
+	.qdName{
+		flex: 1;
+		padding-left: 34rpx;
+	}
+	.qdName
+	{
+		font-size: 28rpx;
+		font-weight: 600;
+		padding-bottom: 16rpx;
+	}
+	.qdName
+	{
+		font-size: 22rpx;
+		color: #666;
+	}
+	.qdButton{
+		padding: 8rpx 24rpx;
+		font-size: 26rpx;
+		background-color: #BAE3FC;
+		color: #fff;
+		border-radius: 30rpx;
+	}
+
+	.nowseng{
+		font-size: 30rpx;
+		font-weight: 600;
+		text-align: center;
+		color: #fff;
+	}
+	.gztext{
+		margin: 40rpx 52rpx;
+		height: 440rpx;
+		// width: 80vw;
+		background: #F4F7FD;
+		border-radius: 10rpx;
+		position: relative;
+		padding: 20rpx;
+		font-size: 30rpx;
+		position: relative;
+	}
+	
+	.noticeCont{
+		
+		text-align: left;
+		padding: 20rpx;
+	}
+	
+	.busend{
+		background-color: #128DDA;
+		width: 144rpx;
+		padding: 14rpx 0;
+		
+		position: absolute;
+		margin-left: 220rpx;
+		margin-right: 220rpx;
+		bottom: 80rpx;
+		border-radius: 10rpx;
+		
+	}
+	
+	.chatPas{
+		margin-bottom: 28rpx;
+		text-align: left;
+		font-size: 28rpx;
+		font-weight: 600;
+	}
+	.chat-set{
+		padding: 50rpx 32rpx;
+	}
+	.swline
+	{
+		padding-top: 28rpx;
+		border-bottom: 4rpx solid #F0F0F0;
+		padding-bottom: 26rpx;
+	}
+	
+	.chatimg{
+		width: 68rpx;
+		height: 38rpx;
+	}
+	.search-input{
+		padding: 32rpx;
+	}
+	.memImg{
+		width: 80rpx;
+		height: 80rpx;
+		border-radius: 100%;
+	}
+	.memimgs{
+		width: 80rpx;
+		height: 80rpx;
+		border-radius: 80rpx;
+	}
+	.ch1
+	{
+		width: 48rpx;
+		height: 48rpx;
+	}
+	.chlr{
+		margin-left: 32rpx;
+		margin-right: 32rpx;
+	}
+	.mem-with{
+		padding: 26rpx 52rpx;
+	}
+	.allfx{
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+	}
+	.memName
+	{
+		font-size: 28rpx;
+		font-weight: 600;
+	}
+	.memflex
+	{
+		padding-left: 32rpx;
+		// padding-right: 32rpx;
+	}
+	.memflex
+	{
+		padding-left: 32rpx;
+		// padding-right: 32rpx;
+	}
+	
+	.memName
+	{
+		font-size: 22rpx;
+		color: #666666;
+		padding-top: 16rpx;
+	}
+	.memName{
+		padding-left: 34rpx;
+		flex: 1;
+		text-align: left;
+	}
+	
+	
+	.membutton{
+		padding-top: 64rpx;
+		padding-left: 32rpx;
+		padding-right: 32rpx;
+		justify-content: center;
+		align-items: center;
+	}
+	.membuttons{
+		background-color: #128DDA;
+		
+		padding: 20rpx 43rpx;
+		justify-content: center;
+		align-items: center;
+		
+		display: flex;
+		color: #fff;
+		font-size: 58rpx;
+		margin: 150rpx 30rpx;
+		border-radius: 10rpx;
+	}
+	
+	.ysflex{
+		
+		padding:46rpx  54rpx 46rpx 54rpx;
+	}
+	.yimg-i{
+		width: 92rpx;
+		height: 92rpx;
+	}
+	.yimg-v{
+		padding-top: 8rpx;
+		font-size: 26rpx;
+		color: #666;
+	}
+	.iscan 
+	{
+		padding: 26rpx 0;
+		background: #128DDA;
+		margin: 40rpx 132rpx;
+		color: #fff;
+		border-radius:16rpx;
+	}
+	.Qdmess{
+		margin-top: 40rpx;
+		padding: 0 120rpx;
+	}
+	.qdpos{
+		position: relative;
+		padding-bottom: 20rpx;
+	}
+	.qsactives{
+		
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 30rpx;
+		width: 100rpx;
+		margin-left: 10rpx;
+		margin-top: 20rpx;
+		border-bottom: 8rpx solid #128DDA;
+		
+	}
+	.phsy{
+		font-size: 62rpx;
+	}
+	
+	
+	
+	.voleg{
+		position: absolute; 
+		bottom: 0;
+		 left: 0; 
+		 width: 60px;
+		  overflow: hidden;
+		   transition: height 0.1s ease;
+	}
+	.play-video 
+	{
+		display: flex;
+		flex-wrap: wrap;
+	}
+	
+	.alpop{
+		width: 680rpx;
+		height: 326rpx;
+		flex: 1;
+		
+	}
+	.allMso{
+		margin-top: 58rpx;
+		font-size: 32rpx;
+		font-weight: 600;
+		text-align: center;
+	}
+	.selfSoc{
+		justify-content: center;
+		align-items: flex-start;
+		margin-top: 24rpx;
+		
+	}
+	.rzFs{
+		color:#FA4F1A ;
+		font-size: 24rpx;
+		margin-bottom: 72rpx;
+		
+	}
+	.isButt{
+		padding: 80rpx;
+	}
+	.allbut{
+		background-color: #E6E6E6;
+		padding: 20rpx 66rpx;
+		border-radius: 34rpx;
+	}
+	.setmute{
+		background-color: #128DDA;
+		padding: 20rpx 38rpx;
+		border-radius: 34rpx;
+	}
+	.ifc{
+		color: #fff;
+	}
+	.dch{
+		width: 32rpx;
+		height: 32rpx;
+	}
+	/* #endif */
+</style>
+
+<style>
+	
+	
+	
+	
+	.trtc-row-area {
+		flex-direction: row;
+		margin-left: 36.53rpx;
+		margin-right: 36.53rpx;
+		margin-top: 17.3rpx;
+		margin-bottom: 17.3rpx;
+		align-items: center;
+		justify-content: space-between;
+	}
+	
+	
+	
+	.trtc-video-area {
+	  top: 0;
+	  position: absolute;
+	  /* left: 0; */
+	  right: 0;
+	  margin-right: 20px;
+	  padding-top: 0;
+	  z-index: 999;
+	}
+	
+	.trtc-video-view {
+		
+		flex: 1;
+		height: 1280px;
+		/* width: 500rpx; */
+		
+	}
+	.trtc-video-remote-view {
+	  border-width: 1.92rpx;
+	
+	}
+	
+	
+	
+
+	
+	/* .trtc-title-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		margin-top: 10rpx;
+	} */
+	/* .trtc-title-text {
+		color: #101010;
+		font-size: 26.92rpx;
+	} */
+	
+	
+	
+	
+	
+	
+	
+	
+	/* .picker-view {
+		padding: 15rpx 25rpx;
+		line-height: 50rpx;
+		font-size: 26.92rpx;
+		background: #FFF;
+		flex: 1;
+	} */
+	
+	
+
+</style>
